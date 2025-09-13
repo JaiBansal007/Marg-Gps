@@ -15,7 +15,6 @@ import GeoFenceRouter from './routes/GeoFence';
 import { GPSConsumer } from './kafka/consumers/GPSconsumer';
 import { GPSProducer } from './kafka/producers/GPSproducer';
 import cookieParser from 'cookie-parser';
-import Vahnrouter from './routes/vahn';
 import alarmRouter from './routes/alarm';
 import alertRouter from './routes/alert';
 import TrailRouter from './routes/trail';
@@ -73,7 +72,6 @@ app.use(GroupRouter);
 app.use(featureRouter);
 app.use(customerRouter);
 app.use(GeoFenceRouter);
-app.use(Vahnrouter)
 app.use(alarmRouter);
 app.use(alertRouter);
 app.use(TrailRouter);

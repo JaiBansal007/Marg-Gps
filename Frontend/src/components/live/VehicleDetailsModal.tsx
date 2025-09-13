@@ -25,7 +25,6 @@ import {
   XCircle,
 } from "lucide-react"
 import type { VehicleDetailsModalProps, RegistrationDbResponse } from "../../types/live/list_type"
-import { fetchRegistrationFromDb, refreshRegistrationDetails } from "../../data/live/list"
 import { reverseGeocode } from "../reversegeocoding"
 
 const VehicleDetailsModal = ({ vehicle, onClose }: VehicleDetailsModalProps) => {
@@ -84,6 +83,38 @@ const VehicleDetailsModal = ({ vehicle, onClose }: VehicleDetailsModalProps) => 
   //       return "text-gray-600"
   //   }
   // }
+
+  // Hardcoded registration data for demonstration
+  const hardcodedDbData: RegistrationDbResponse = {
+    success: true,
+    message: "Fetched successfully",
+    status_message: "Active",
+    rc_purchase_dt: "10-05-2020",
+    rc_regn_no: "MH12AB1234",
+    rc_regn_dt: "15-05-2020",
+    rc_regn_upto: "30-06-2026", // valid
+    rc_owner_name: "John Doe",
+    rc_present_address: "123 Main Street, Pune, Maharashtra",
+    rc_vch_catg_desc: "LMV",
+    rc_vh_class_desc: "Car",
+    rc_maker_model: "Maruti Suzuki Swift",
+    rc_maker_desc: "Maruti Suzuki",
+    rc_color: "White",
+    rc_chasi_no: "MA3EHB12S00123456",
+    rc_eng_no: "K12MN1234567",
+    rc_fuel_desc: "Petrol",
+    rc_norms_desc: "BS6",
+    rc_fit_upto: "15-05-2023", // expired
+    rc_insurance_comp: "ICICI Lombard",
+    rc_insurance_policy_no: "ICICIXYZ123456",
+    rc_insurance_upto: "30-12-2024", // valid
+    rc_permit_no: "PERMIT12345",
+    rc_permit_type: "National",
+    rc_permit_valid_upto: "01-01-2022", // expired
+    rc_tax_upto: "30-06-2026", // valid
+    rc_pucc_upto: "15-05-2023", // expired
+    // ...other fields if any...
+  }
 
   // Helper to check if a date string is valid and in the future
   const getDateStatus = (dateStr?: string) => {
@@ -151,32 +182,33 @@ const VehicleDetailsModal = ({ vehicle, onClose }: VehicleDetailsModalProps) => 
       setError(null)
 
       try {
-        console.log("Fetching registration data from database for:", vehicle.vehicleNumber)
-        const data = await fetchRegistrationFromDb(vehicle.vehicleNumber)
+        // Simulate fetching registration data (hardcoded)
+        // const data = await fetchRegistrationFromDb(vehicle.vehicleNumber)
+        const data = hardcodedDbData
         setDbData(data)
         setHasLoadedDb(true)
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch registration data from database")
+        setError("Failed to fetch registration data from database")
       } finally {
         setIsLoading(false)
       }
     }
   }
 
+  // Disable refresh logic, just keep button
   const handleRefreshRegistration = async () => {
-    setIsRefreshing(true)
-    setError(null)
-
-    try {
-      console.log("Refreshing registration details for:", vehicle.vehicleNumber)
-      const data = await refreshRegistrationDetails(vehicle.vehicleNumber)
-      setDbData(data)
-      setHasLoadedDb(true)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to refresh registration details")
-    } finally {
-      setIsRefreshing(false)
-    }
+    // setIsRefreshing(true)
+    // setError(null)
+    // try {
+    //   const data = await refreshRegistrationDetails(vehicle.vehicleNumber)
+    //   setDbData(data)
+    //   setHasLoadedDb(true)
+    // } catch (err) {
+    //   setError("Failed to refresh registration details")
+    // } finally {
+    //   setIsRefreshing(false)
+    // }
+    // Do nothing for now
   }
 
   const renderRegistrationDetails = () => {
@@ -349,8 +381,8 @@ const VehicleDetailsModal = ({ vehicle, onClose }: VehicleDetailsModalProps) => 
               <div>
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Fitness Valid Until</p>
                 <p className={`text-sm font-medium flex items-center ${getDateStatus(dbData.rc_fit_upto).color}`}>
-                  {getDateStatus(dbData.rc_insurance_upto).icon}
-                  {dbData.rc_insurance_upto || "Not Available"}
+                  {getDateStatus(dbData.rc_fit_upto).icon}
+                  {dbData.rc_fit_upto || "Not Available"}
                 </p>
               </div>
             </div>
