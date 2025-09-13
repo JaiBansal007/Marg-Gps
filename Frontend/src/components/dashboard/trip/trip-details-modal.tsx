@@ -19,14 +19,8 @@ import { useState, useEffect } from "react"
 // import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 // import { formatDate } from "../../../components/formatdate"
-// import {
-//   fetchIntutrackData,
-//   refreshIntutrackData,
-// } from "../../../data/dashboard/trip"
 import type { TripDetailsModalProps } from "../../../types/dashboard/trip_type"
-// import type { IntutrackData } from "../../../types/dashboard/trip_type"
 import type { RegistrationDbResponse } from "@/types/live/list_type"
-import { fetchRegistrationFromDb, refreshRegistrationDetails } from "../../../data/live/list"
 import { reverseGeocode } from "../../reversegeocoding"
 
 export function TripDetailsModal({
@@ -35,8 +29,6 @@ export function TripDetailsModal({
   selectedTrip,
 }: Omit<TripDetailsModalProps, "getStatusColor">) {
   const [activeTab, setActiveTab] = useState<"stops" | "trip" | "registration">("stops")
-  // const [intutrackData, setIntutrackData] = useState<IntutrackData | null>(null)
-  // const [loadingIntutrack, setLoadingIntutrack] = useState(false)
   const [dbData, setDbData] = useState<RegistrationDbResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -186,6 +178,38 @@ export function TripDetailsModal({
     }
   }, [open, selectedTrip, activeTab])
 
+  // Hardcoded registration data for demonstration
+  const hardcodedDbData: RegistrationDbResponse = {
+    success: true,
+    message: "Fetched successfully",
+    status_message: "Active",
+    rc_purchase_dt: "10-05-2020",
+    rc_regn_no: "MH12AB1234",
+    rc_regn_dt: "15-05-2020",
+    rc_regn_upto: "30-06-2026", // valid
+    rc_owner_name: "John Doe",
+    rc_present_address: "123 Main Street, Pune, Maharashtra",
+    rc_vch_catg_desc: "LMV",
+    rc_vh_class_desc: "Car",
+    rc_maker_model: "Maruti Suzuki Swift",
+    rc_maker_desc: "Maruti Suzuki",
+    rc_color: "White",
+    rc_chasi_no: "MA3EHB12S00123456",
+    rc_eng_no: "K12MN1234567",
+    rc_fuel_desc: "Petrol",
+    rc_norms_desc: "BS6",
+    rc_fit_upto: "15-05-2023", // expired
+    rc_insurance_comp: "ICICI Lombard",
+    rc_insurance_policy_no: "ICICIXYZ123456",
+    rc_insurance_upto: "30-12-2024", // valid
+    rc_permit_no: "PERMIT12345",
+    rc_permit_type: "National",
+    rc_permit_valid_upto: "01-01-2022", // expired
+    rc_tax_upto: "30-06-2026", // valid
+    rc_pucc_upto: "15-05-2023", // expired
+    // ...other fields if any...
+  }
+
   // Handle tab change and load registration data if needed
   const handleTabChange = async (tab: "stops" | "trip" | "registration") => {
     setActiveTab(tab)
@@ -196,32 +220,33 @@ export function TripDetailsModal({
       setError(null)
 
       try {
-        const data = await fetchRegistrationFromDb(selectedTrip.Vehicle_number)
+        // const data = await fetchRegistrationFromDb(selectedTrip.Vehicle_number)
+        const data = hardcodedDbData
         setDbData(data)
         setHasLoadedDb(true)
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch registration data from database")
+        setError("Failed to fetch registration data from database")
       } finally {
         setIsLoading(false)
       }
     }
   }
 
-  // Handle refreshing registration details
+  // Disable refresh logic, just keep button
   const handleRefreshRegistration = async () => {
-    if (!selectedTrip) return
-    setIsRefreshing(true)
-    setError(null)
-
-    try {
-      const data = await refreshRegistrationDetails(selectedTrip.Vehicle_number)
-      setDbData(data)
-      setHasLoadedDb(true)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to refresh registration details")
-    } finally {
-      setIsRefreshing(false)
-    }
+    // if (!selectedTrip) return
+    // setIsRefreshing(true)
+    // setError(null)
+    // try {
+    //   const data = await refreshRegistrationDetails(selectedTrip.Vehicle_number)
+    //   setDbData(data)
+    //   setHasLoadedDb(true)
+    // } catch (err) {
+    //   setError(err instanceof Error ? err.message : "Failed to refresh registration details")
+    // } finally {
+    //   setIsRefreshing(false)
+    // }
+    // Do nothing for now
   }
 
   // Render registration details content

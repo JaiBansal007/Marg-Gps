@@ -3,7 +3,6 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { eq, inArray , sql , and } from 'drizzle-orm';
 import {entity , entity_vendor , vendor, vahan} from '../db/schema';
 const db = drizzle(process.env.DATABASE_URL!);
-import { getVahanData } from './vahn_Controller'; // Importing the vahan data fetching function
 
 // working
 
@@ -68,76 +67,6 @@ export async function createEntity(req: Request, res: Response) {
             }
         });
 
-        // Fetch vehicle data from VAHAN API and store it in the database
-        try {
-            // Create a mock request object to use with getVahanData
-            const mockReq = { 
-                body: { 
-                    vehiclenumber: vehicleNumber 
-                } 
-            } as Request;
-            
-            // Create a mock response object to capture VAHAN API response
-            const mockRes = {
-                status: function(statusCode: number) {
-                    this.statusCode = statusCode;
-                    return this;
-                },
-                json: function(data: any) {
-                    this.responseData = data;
-                    return this;
-                },
-                statusCode: 0,
-                responseData: null
-            } as any;
-            
-            // Call VAHAN API
-            await getVahanData(mockReq, mockRes)
-            // console.log('VAHAN API response:', vahanData    );
-            
-            // If we got a successful response, store the data
-            if (mockRes.statusCode === 200 && mockRes.responseData) {
-                const vahanData = mockRes.responseData.json;
-                
-                // Insert VAHAN data into the database
-                await db.insert(vahan).values({
-                    status_message: vahanData.stautsMessage || '',
-                    rc_regn_no: vehicleNumber,
-                    rc_regn_dt: vahanData.rc_regn_dt || '',
-                    rc_regn_upto: vahanData.rc_regn_upto || '',
-                    rc_purchase_dt: vahanData.rc_purchase_dt || '',
-                    rc_owner_name: vahanData.rc_owner_name || '',
-                    rc_present_address: vahanData.rc_present_address || '',
-                    rc_vch_catg_desc: vahanData.rc_vch_catg_desc || '',
-                    rc_insurance_comp: vahanData.rc_insurance_comp || '',
-                    rc_insurance_policy_no: vahanData.rc_insurance_policy_no || '',
-                    rc_insurance_upto: vahanData.rc_insurance_upto || '',
-                    rc_permit_no: vahanData.rc_permit_no || '',
-                    rc_permit_type: vahanData.rc_permit_type || '',
-                    rc_permit_valid_upto: vahanData.rc_permit_valid_upto || '',
-                    rc_vh_class_desc: vahanData.rc_vh_class_desc || '',
-                    rc_maker_model: vahanData.rc_maker_model || '',
-                    rc_maker_desc: vahanData.rc_maker_desc || '',
-                    rc_color: vahanData.rc_color || '',
-                    rc_chasi_no: vahanData.rc_chasi_no || '',
-                    rc_eng_no: vahanData.rc_eng_no || '',
-                    rc_fuel_desc: vahanData.rc_fuel_desc || '',
-                    rc_norms_desc: vahanData.rc_norms_desc || '',
-                    rc_fit_upto: vahanData.rc_fit_upto || '',
-                    rc_tax_upto: vahanData.rc_tax_upto || '',
-                    rc_pucc_upto: vahanData.rc_pucc_upto || '',
-                    entity_id: insertedEntity.id
-                });
-                
-                console.log('VAHAN data stored successfully for vehicle:', vehicleNumber);
-            } else {
-                console.warn('Failed to fetch VAHAN data for vehicle:', vehicleNumber);
-            }
-        } catch (vahanError) {
-            // Log error but don't fail the entity creation
-            console.error('Error fetching or storing VAHAN data:', vahanError);
-        }
-        
     } catch (error) {
         console.error('Error creating entity:', error);
         res.status(500).json({ 

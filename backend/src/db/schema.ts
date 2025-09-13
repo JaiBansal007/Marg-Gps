@@ -519,41 +519,6 @@ export const entity_vendor = mysqlTable('entity_vendor', {
 
 export const entityVendorIdx = index('idx_entity_vendor').on(entity_vendor.entity_id, entity_vendor.vendor_id);
 
-export const vahan = mysqlTable('vahan', {
-  id: int().primaryKey().autoincrement(),
-  status_message: varchar('status_message', { length: 255 }),
-  rc_regn_no: varchar('rc_regn_no', { length: 255 }).notNull().unique(),
-  rc_regn_dt: varchar('rc_regn_dt', { length: 255 }),
-  rc_regn_upto: varchar('rc_regn_upto', { length: 255 }),
-  rc_purchase_dt: varchar('rc_purchase_dt', { length: 255 }),
-  rc_owner_name: varchar('rc_owner_name', { length: 255 }),
-  rc_present_address: varchar('rc_present_address', { length: 512 }),
-  rc_vch_catg_desc: varchar('rc_vch_catg_desc', { length: 255 }),
-  rc_insurance_comp: varchar('rc_insurance_comp', { length: 255 }),
-  rc_insurance_policy_no: varchar('rc_insurance_policy_no', { length: 255 }),
-  rc_insurance_upto: varchar('rc_insurance_upto', { length: 255 }),
-  rc_permit_no: varchar('rc_permit_no', { length: 255 }),
-  rc_permit_type: varchar('rc_permit_type', { length: 255 }),
-  rc_permit_valid_upto: varchar('rc_permit_valid_upto', { length: 255 }),
-  rc_vh_class_desc: varchar('rc_vh_class_desc', { length: 255 }),
-  rc_maker_model: varchar('rc_maker_model', { length: 255 }),
-  rc_maker_desc: varchar('rc_maker_desc', { length: 255 }),
-  rc_color: varchar('rc_color', { length: 100 }),
-  rc_chasi_no: varchar('rc_chasi_no', { length: 255 }),
-  rc_eng_no: varchar('rc_eng_no', { length: 255 }),
-  rc_fuel_desc: varchar('rc_fuel_desc', { length: 100 }),
-  rc_norms_desc: varchar('rc_norms_desc', { length: 255 }),
-  rc_fit_upto: varchar('rc_fit_upto', { length: 255 }),
-  rc_tax_upto: varchar('rc_tax_upto', { length: 255 }),
-  rc_pucc_upto: varchar('rc_pucc_upto', { length: 255 }),
-  entity_id: int('entity_id').references(() => entity.id, { onDelete: 'cascade' }),
-  created_at: timestamp('created_at').defaultNow(),
-  updated_at: timestamp('updated_at').defaultNow().onUpdateNow(),
-});
-
-export const vahanRegistrationIdx = index('idx_vahan_registration').on(vahan.rc_regn_no, vahan.entity_id);
-export const vahanEntityIdx = index('idx_vahan_entity').on(vahan.entity_id);
-
 export const role = mysqlTable('role', {
   id: int().primaryKey().autoincrement(),
   role_name: varchar('role_name', { length: 255 }).notNull(),
