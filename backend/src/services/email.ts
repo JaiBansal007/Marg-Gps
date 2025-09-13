@@ -398,4 +398,49 @@ export async function sendDummyAlertEmailForTest() {
   }
 }
 
+// /**
+//  * Send a test email to nayan11404@gmail.com
+//  */
+// export async function sendTestEmailToNayan(): Promise<void> {
+//   const mailOptions = {
+//     from: EMAIL_CONFIG.from,
+//     to: "nayan11404@gmail.com",
+//     subject: '🧪 Test Email - Vehicle Tracking System',
+//     text: 'This is a test email to verify the email configuration.',
+//     html: `
+//       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+//         <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+//           <h2 style="color: #28a745;">🧪 Test Email</h2>
+//           <p>This is a test email to verify the email configuration for the Vehicle Tracking System.</p>
+//           <p><strong>Sent at:</strong> ${new Date().toLocaleString()}</p>
+//           <div style="background-color: #d4edda; padding: 10px; border-radius: 5px; color: #155724;">
+//             ✅ Email configuration is working correctly!
+//           </div>
+//         </div>
+//       </div>
+//     `,
+//   };
+
+//   try {
+//     await transporter.sendMail(mailOptions);
+//     console.log('✅ Test email sent to nayan11404@gmail.com');
+//   } catch (error) {
+//     console.error('❌ Failed to send test email to nayan11404@gmail.com:', error);
+//   }
+// }
+
+// // Example: Call this function to send a test email to your configured sender address
+// // (Uncomment to use in a script or route handler)
+// // testEmailConfiguration().then(success => {
+// //   if (success) {
+// //     console.log('Test email sent successfully.');
+// //   } else {
+// //     console.log('Test email failed.');
+// //   }
+// // });
+
+// // Example: Call this function to send a test email to nayan11404@gmail.com
+// // (Uncomment to use in a script or route handler)
+// sendTestEmailToNayan();
+
 
