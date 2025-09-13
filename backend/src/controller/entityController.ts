@@ -1,7 +1,7 @@
 import {Request , Response} from 'express';
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, inArray , sql , and } from 'drizzle-orm';
-import {entity , entity_vendor , vendor, vahan} from '../db/schema';
+import {entity , entity_vendor , vendor} from '../db/schema';
 const db = drizzle(process.env.DATABASE_URL!);
 
 // working
