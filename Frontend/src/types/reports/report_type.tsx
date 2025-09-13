@@ -100,7 +100,6 @@ export interface TripGpsStatusReportData {
   exitTime: string
   gpsPingCount: number
   lastPingVendor: string
-  hasFasttagPing: boolean
 }
 
 export interface TripSummaryStop {

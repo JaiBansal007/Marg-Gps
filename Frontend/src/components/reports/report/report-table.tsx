@@ -692,17 +692,6 @@ export function ReportTable({
                         <div className="space-y-1">
                           <div className="text-sm text-gray-900 dark:text-gray-100">Pings: {item.gpsPingCount}</div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">Last: {item.lastPingVendor}</div>
-                          <div className="text-xs">
-                            <span
-                              className={`px-1 py-0.5 rounded text-xs ${
-                                item.hasFasttagPing
-                                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                                  : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
-                              }`}
-                            >
-                              Fasttag: {item.hasFasttagPing ? "Yes" : "No"}
-                            </span>
-                          </div>
                         </div>
                       </td>
                     </motion.tr>
