@@ -1,7 +1,6 @@
 import type {
   TripApi,
   AlertResponse,
-  IntutrackData,
 } from "../../types/dashboard/trip_type"
 import axios from "axios"
 
@@ -101,41 +100,41 @@ export async function toggleAlertStatus(alertId: number, shipmentId: string): Pr
   }
 }
 
-export async function fetchIntutrackData(shipmentId: string): Promise<IntutrackData> {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/intutrack/db?shipment_id=${shipmentId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`,
-        },
-      }
-    )
-    return res.data.data
-  } catch (error) {
-    console.error("Error fetching intutrack data:", error)
-    throw error
-  }
-}
+// export async function fetchIntutrackData(shipmentId: string): Promise<IntutrackData> {
+//   try {
+//     const res = await axios.get(
+//       `${import.meta.env.VITE_BACKEND_URL}/intutrack/db?shipment_id=${shipmentId}`,
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`,
+//         },
+//       }
+//     )
+//     return res.data.data
+//   } catch (error) {
+//     console.error("Error fetching intutrack data:", error)
+//     throw error
+//   }
+// }
 
-export async function refreshIntutrackData(shipmentId: string): Promise<IntutrackData> {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/intutrack/refresh?shipment_id=${shipmentId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`,
-        },
-      }
-    )
-    return res.data.data
-  } catch (error) {
-    console.error("Error refreshing intutrack data:", error)
-    throw error
-  }
-}
+// export async function refreshIntutrackData(shipmentId: string): Promise<IntutrackData> {
+//   try {
+//     const res = await axios.get(
+//       `${import.meta.env.VITE_BACKEND_URL}/intutrack/refresh?shipment_id=${shipmentId}`,
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`,
+//         },
+//       }
+//     )
+//     return res.data.data
+//   } catch (error) {
+//     console.error("Error refreshing intutrack data:", error)
+//     throw error
+//   }
+// }
 
 // Legacy function for backward compatibility
 export async function generateMockTrips(userId: string) {
