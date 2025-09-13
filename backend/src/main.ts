@@ -22,7 +22,6 @@ import bodyParser from 'body-parser';
 import bodyParserXml from 'body-parser-xml';
 import reportRouter from './routes/report';
 import alarmReportRouter from './routes/alarmReport';
-// import { authenticateToken } from './middleware/sso';
 import { insertdumpdata } from './controller/Dump';
 bodyParserXml(bodyParser);
 
@@ -36,7 +35,6 @@ app.use(bodyParser.xml({
 }));
 const allowedOrigins = [
   'http://localhost:5173', // Local dev
-  'https://unifiedgps.mlldev.com',
 ]
 
 const corsOptions = {

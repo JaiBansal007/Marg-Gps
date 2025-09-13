@@ -1,11 +1,3 @@
-// normal get all alerts , alert by user_id (i.e which geofence group access, vehicle group access , cusotmer group access)
-// by default all if some feilds have not selected , if two feilds are selected intersection 
-
-// harr trip pr pop up harr alert ka count total alert active , manul , currect status 
-
-// controleer for toggle status
-
-
 import { Request, Response } from "express";
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, and, gt, lt, lte, gte, inArray, isNull, not, sql } from "drizzle-orm";
