@@ -229,7 +229,7 @@ export const generateTripGpsStatusReport = async (filters: ReportFilters): Promi
           exitTime: stop.exit_time,
           gpsPingCount: stop.gps_ping_count,
           lastPingVendor: stop.last_ping_vendor,
-          hasFasttagPing: stop.has_fasttag_ping,
+
         })
       })
     })
@@ -481,7 +481,6 @@ export const exportReportAsCSV = (
       "Exit Time",
       "GPS Ping Count",
       "Last Ping Vendor",
-      "Has Fasttag Ping",
     ]
 
     // Convert data to CSV format
@@ -510,7 +509,6 @@ export const exportReportAsCSV = (
           `"${row.exitTime}"`,
           row.gpsPingCount,
           `"${row.lastPingVendor}"`,
-          row.hasFasttagPing ? "Yes" : "No",
         ].join(","),
       ),
     ].join("\n")

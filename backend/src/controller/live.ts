@@ -204,23 +204,10 @@ export async function getLiveData(userid: any, groups: any[] = []): Promise<any>
         }
 
 
-
-        let usedFastTag = false;
-        let fastTagLat = "";
-        let fastTagLng = "";
         let vendorName = gpsData.GPSVendor ?? "Unknown Vendor";
-
-        // Check if we need to call FastTag API or use stored data
+        
         if (liveStatus === "No Update" && ent.vehicleNumber) {
-            // Check if we have existing FastTag data in the database
-            const existingFastTagData = await db.select()
-                .from(gps_schema)
-                .where(eq(gps_schema.trailerNumber, ent.vehicleNumber))
-                .orderBy(desc(gps_schema.timestamp))
-                .limit(1);
-
-            const hasExistingFastTagData = existingFastTagData[0]?.GPSVendor === "FASTAG";
-
+            
             // Determine previous status based on GPS data from 3.1 hours ago
             let previousStatus = "No Data";
             const fourHoursAgo = Date.now() - (3.1 * 60 * 60 * 1000);
@@ -242,66 +229,6 @@ export async function getLiveData(userid: any, groups: any[] = []): Promise<any>
                 if (prevDiffHours <= 3) {
                     previousStatus = "Active";
                 }
-            }
-
-            // Only call FastTag API if status changed from Active to No Update and no existing FastTag data
-            if (previousStatus === "Active" && !hasExistingFastTagData) {
-                try {
-                    const fastTagResp = await axios.post(
-                        `${process.env.FAST_TAG_API_URL}`,
-                        { vehiclenumber: ent.vehicleNumber },
-                        {
-                            headers: {
-                                "Accept": "application/json",
-                                "Content-Type": "application/json",
-                                "api-key": `${process.env.FAST_TAG_API_KEY}`,
-                                "seckey": `${process.env.FAST_TAG_API_SECRET}`,
-                            }
-                        }
-                    );
-
-                    const txnList = fastTagResp?.data?.json?.response?.[0]?.response?.vehicle?.vehltxnList?.txn;
-                    console.log(`Fast Tag response for ${ent.vehicleNumber}:`, txnList);
-
-                    if (Array.isArray(txnList) && txnList.length > 0) {
-                        const latestTxn = txnList.reduce((a, b) =>
-                            new Date(a.readerReadTime) > new Date(b.readerReadTime) ? a : b
-                        );
-
-                        if (latestTxn.tollPlazaGeocode) {
-                            const [lat, lng] = latestTxn.tollPlazaGeocode.split(",");
-                            fastTagLat = lat;
-                            fastTagLng = lng;
-                            address = latestTxn.tollPlazaName || "";
-                            usedFastTag = true;
-                            vendorName = "FASTAG";
-
-                            // Store FastTag data in database
-                            await db.insert(gps_schema).values({
-                                trailerNumber: ent.vehicleNumber,
-                                latitude: lat,
-                                longitude: lng,
-                                GPSVendor: "FASTAG",
-                                timestamp: Date.now(),
-                                gpstimestamp: Math.floor(Date.now() / 1000),
-                                gprstimestamp: Math.floor(Date.now() / 1000)
-                            });
-
-                            console.log(`FastTag data stored for ${ent.vehicleNumber}:`, lat, lng);
-                        }
-                    }
-                } catch (err) {
-                    console.error(`Error fetching Fast Tag data for ${ent.vehicleNumber}:`, err);
-                }
-            }
-            // Use existing FastTag data if available
-            else if (hasExistingFastTagData) {
-                const fastTagData = existingFastTagData[0];
-                fastTagLat = fastTagData.latitude !== undefined && fastTagData.latitude !== null ? String(fastTagData.latitude) : "";
-                fastTagLng = fastTagData.longitude !== undefined && fastTagData.longitude !== null ? String(fastTagData.longitude) : "";
-                usedFastTag = true;
-                vendorName = "FASTAG";
-                console.log(`Using existing FastTag data for ${ent.vehicleNumber}:`, fastTagLat, fastTagLng);
             }
         }
 
@@ -343,8 +270,8 @@ export async function getLiveData(userid: any, groups: any[] = []): Promise<any>
             lastgpstime: gpsData.gpstimestamp ? formatDate(new Date(gpsData.gpstimestamp * 1000).toISOString()) : "",
             group: groupNames,
             hasSpeedChart: false,
-            lat: usedFastTag ? fastTagLat : (gpsData.latitude ?? ""),
-            lng: usedFastTag ? fastTagLng : (gpsData.longitude ?? "")
+            lat: (gpsData.latitude ?? ""),
+            lng: (gpsData.longitude ?? "")
         });
     }
     console.log("Live data fetched successfully");

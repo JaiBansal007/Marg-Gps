@@ -1,14 +1,3 @@
-// // frontend se milega custoemr group , vaha se milega custoemr name , customer name aate h stop me , ek trip me multiple trip hote h ek trip me multiple stops hote h , agr koi bhi customer name h jo uss trip ke kissi bhi stopp me h , so we need to return that trip , iske saath we will be getting date range we need to return only those trip ehcih lie in that date reange , we will aslo be gettinng trip_status (active(active me pickup, delivery , intransit) , inactive ya all) , 
-// we  need to return so ther will be common info andd info which is diff
-// {
-//     common info : [shipment id , trip start time , trip end time , vehicle number , origin and destination trip ke , service provider , gps vendor jo dispatch xml me aata h , if intugine then (consent status , last updated time , operator) , trip status ]
-// }
-
-// {
-    // differnt info : stop wise (planned sequence , actual sequence , stop type , lr number , custoemr name , entry time, exit time , no. of gps ping(2 consecutive stop ke beeche me jitne ping aae for first its like origin se lekr first tk ) , jo isme last ping aaya h apritcualer stop me uska vendor kon tah , isme fasttag ke koi ping aaye h (need to return yes/no) , )
-// }
-
-
 import { Request, Response } from 'express';
 import { 
   shipment, 
@@ -58,7 +47,6 @@ interface StopInfo {
   exit_time: string;
   gps_ping_count: number;
   last_ping_vendor: string;
-  has_fasttag_ping: boolean;
 }
 
 interface TripGpsStatusResponse {
@@ -323,7 +311,7 @@ export class TripGpsStatusReportController {
         endTime = currentStop.entry_time || '';
       }
 
-      const { pingCount, lastPingVendor, hasFasttagPing } = await this.getGpsPingInfo(
+      const { pingCount, lastPingVendor} = await this.getGpsPingInfo(
         vehicleNumber,
         startTime,
         endTime
@@ -338,8 +326,7 @@ export class TripGpsStatusReportController {
         entry_time: currentStop.entry_time || '',
         exit_time: currentStop.exit_time || '',
         gps_ping_count: pingCount,
-        last_ping_vendor: lastPingVendor,
-        has_fasttag_ping: hasFasttagPing
+        last_ping_vendor: lastPingVendor
       };
 
       stopsInfo.push(stopInfo);
@@ -354,10 +341,9 @@ export class TripGpsStatusReportController {
   private async getGpsPingInfo(vehicleNumber: string, startTime: string, endTime: string): Promise<{
     pingCount: number;
     lastPingVendor: string;
-    hasFasttagPing: boolean;
   }> {
     if (!vehicleNumber || !startTime || !endTime) {
-      return { pingCount: 0, lastPingVendor: '', hasFasttagPing: false };
+      return { pingCount: 0, lastPingVendor: ''};
     }
 
     try {
@@ -384,17 +370,11 @@ export class TripGpsStatusReportController {
       const pingCount = gpsPings.length;
       const lastPingVendor = gpsPings.length > 0 ? gpsPings[0].GPSVendor || '' : '';
       
-      // Check for Fasttag pings (assuming Fasttag vendor contains 'fasttag' in name)
-      const hasFasttagPing = gpsPings.some(ping => 
-        ping.GPSVendor?.toLowerCase().includes('fasttag') || 
-        ping.GPSVendor?.toLowerCase().includes('fastag')
-      );
-
-      return { pingCount, lastPingVendor, hasFasttagPing };
+      return { pingCount, lastPingVendor};
 
     } catch (error) {
       console.error('Error getting GPS ping info:', error);
-      return { pingCount: 0, lastPingVendor: '', hasFasttagPing: false };
+      return { pingCount: 0, lastPingVendor: ''};
     }
   }
 
