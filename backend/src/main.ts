@@ -22,7 +22,7 @@ import bodyParser from 'body-parser';
 import bodyParserXml from 'body-parser-xml';
 import reportRouter from './routes/report';
 import alarmReportRouter from './routes/alarmReport';
-import { authenticateToken } from './middleware/sso';
+// import { authenticateToken } from './middleware/sso';
 import { insertdumpdata } from './controller/Dump';
 bodyParserXml(bodyParser);
 

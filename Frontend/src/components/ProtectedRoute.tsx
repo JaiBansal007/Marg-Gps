@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      window.location.href = `${import.meta.env.VITE_SSO_LOGIN_PAGE_URL}`
+      window.location.href = "/signin"
     }
   }, [loading, isAuthenticated])
 

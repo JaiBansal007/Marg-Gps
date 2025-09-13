@@ -16,34 +16,7 @@ import {
 import { eq, and, or, sql, like, inArray } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import axios from "axios";
 import { db } from "../db/connection";
-
-export async function makeuserinactive(existingUser: any,token: string,status?:false) {
-      try{
-        const response=await axios.put(`${process.env.SSO_URL}/user`,{
-          name: existingUser[0].email,
-          firstName: existingUser[0].username,
-          lastName: existingUser[0].username,
-          ou: `${process.env.SSO_OU}`,
-          employeeCode: "",
-          designation: null,
-          contactNumber: "",
-          isActive: status
-        }, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
-          })
-        return response;
-      }catch(error){
-        console.error('Error making user inactive:', error);
-        return {status: 500, data: { message: 'Failed to make user inactive' }};
-      }
-}
-
-
 
 //working
 export const getAllUsers = async () => {
@@ -283,35 +256,6 @@ export const createUser = async (req: Request, res: Response) => {
     const custgrp = req.body.custgrp || [];
     const vehiclegrp = req.body.vehiclegroup || [];
     const geofencegrp = req.body.geofencegroup || [];
-    const token = req.headers.authorization?.split(" ")[1] || process.env.SSO_TOKEN;
-
-    // SSO call (keep as is - external API call)
-    const response = await axios.post(
-      `${process.env.SSO_URL}/createUserAndMapGroups`,
-      {
-        name: email,
-        firstName: username,
-        lastName: username,
-        ou: `${process.env.SSO_OU}`,
-        password: password,
-        groups: [`${process.env.SSO_GROUP}`],
-        permissions: [
-          roles == "admin"
-            ? `${process.env.SSO_ADMIN_PERMISSION}`
-            : `${process.env.SSO_USER_PERMISSION}`,
-        ],
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.status !== 200) {
-      return res.status(500).json({ message: "Failed to create user in SSO" });
-    }
 
     // Optimized database transaction
     const result = await db.transaction(async (tx) => {
@@ -445,7 +389,7 @@ export const createUser = async (req: Request, res: Response) => {
 
     res.status(201).json({
       message: "User created successfully",
-      data: result, // Changed from 'user: result' to 'data: result' to match your API response pattern
+      data: result,
     });
 
   } catch (error) {
@@ -474,13 +418,6 @@ export const updateUser = async (req: Request, res: Response) => {
     if (existingUser.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
-
-     const ssoResponse = await makeuserinactive(existingUser,req.headers.authorization?.split(' ')[1]||"",active);
-     
-      if(ssoResponse.status !== 200) {
-        console.error('Error making user inactive in SSO:', ssoResponse.data);
-        return {};
-      }
 
     await db
       .update(usersTable)
@@ -596,8 +533,7 @@ export const updateUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const token =
-      req.headers.authorization?.split(" ")[1] || process.env.SSO_TOKEN;
+
     // Check if user exists
     const existingUser = await db
       .select()
@@ -605,13 +541,6 @@ export const deleteUser = async (req: Request, res: Response) => {
       .where(eq(usersTable.id, parseInt(id)));
     if (existingUser.length === 0) {
       return res.status(404).json({ message: "User not found" });
-    }
-   const response =await makeuserinactive(existingUser,req.headers.authorization?.split(' ')[1]||"");
-
-    console.log(response);
-    if (response.status !== 200) {
-      console.error("Error deleting user in SSO:", response.data);
-      return res.status(500).json({ message: "Failed to delete user in SSO" });
     }
 
     await db.delete(user_role).where(eq(user_role.user_id, parseInt(id)));
@@ -861,6 +790,7 @@ export const getUserbyUsername = async (searchTerm: string) => {
           }
         }
       }
+      
       const vehicleGroups = await db
         .select()
         .from(user_vehicle_group)
@@ -935,9 +865,6 @@ export async function logoutUser(req: Request, res: Response) {
     }
 
     console.log();
-
-    await axios.delete(`${process.env.SSO_URL}/oauth/revoke/${token}`);
-
     res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
     console.error("Error during logout:", error);
