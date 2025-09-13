@@ -366,37 +366,37 @@ Disclaimer: This is an automated email. If you are not the intended recipient, p
 /**
  * TEMP: Send a dummy alert email to a test address for verification
  */
-export async function sendDummyAlertEmailForTest() {
-  const { subject, html, text } = generateAlertEmailTemplate({
-    alarmTypeId: 3, // Continuous Driving
-    vehicleNumber: "AP29TB3613",
-    tripId: "M5090535",
-    location: "SH 2, Chityala, Telangana\n14 m from Andhra Pradesh Grameena Vikas Bank, Pin-508114 (India)",
-    alertTime: "12/03/2025 21:16:10",
-    driverName: "VENKATESH",
-    driverMobile: "9553029201",
-    vendorName: "GTROPY",
-    customerName: "ASOB",
-    alarmValue: 3, // 3 hours
-    description: "Continuous driving detected for more than 3 hours.",
-    additionalInfo: undefined,
-  });
+// export async function sendDummyAlertEmailForTest() {
+//   const { subject, html, text } = generateAlertEmailTemplate({
+//     alarmTypeId: 3, // Continuous Driving
+//     vehicleNumber: "AP29TB3613",
+//     tripId: "M5090535",
+//     location: "SH 2, Chityala, Telangana\n14 m from Andhra Pradesh Grameena Vikas Bank, Pin-508114 (India)",
+//     alertTime: "12/03/2025 21:16:10",
+//     driverName: "VENKATESH",
+//     driverMobile: "9553029201",
+//     vendorName: "GTROPY",
+//     customerName: "ASOB",
+//     alarmValue: 3, // 3 hours
+//     description: "Continuous driving detected for more than 3 hours.",
+//     additionalInfo: undefined,
+//   });
 
-  const mailOptions = {
-    from: EMAIL_CONFIG.from,
-    to: "nayan11404@gmail.com",
-    subject,
-    text,
-    html,
-  };
+//   const mailOptions = {
+//     from: EMAIL_CONFIG.from,
+//     to: "nayan11404@gmail.com",
+//     subject,
+//     text,
+//     html,
+//   };
 
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log("✅ Dummy alert email sent to nayan11404@gmail.com");
-  } catch (error) {
-    console.error("❌ Failed to send dummy alert email:", error);
-  }
-}
+//   try {
+//     await transporter.sendMail(mailOptions);
+//     console.log("✅ Dummy alert email sent to nayan11404@gmail.com");
+//   } catch (error) {
+//     console.error("❌ Failed to send dummy alert email:", error);
+//   }
+// }
 
 // /**
 //  * Send a test email to nayan11404@gmail.com
