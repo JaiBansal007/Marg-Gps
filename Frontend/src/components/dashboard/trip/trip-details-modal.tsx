@@ -16,15 +16,15 @@ import {
   XCircle,
 } from "lucide-react"
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { formatDate } from "../../../components/formatdate"
-import {
-  fetchIntutrackData,
-  refreshIntutrackData,
-} from "../../../data/dashboard/trip"
+// import { formatDate } from "../../../components/formatdate"
+// import {
+//   fetchIntutrackData,
+//   refreshIntutrackData,
+// } from "../../../data/dashboard/trip"
 import type { TripDetailsModalProps } from "../../../types/dashboard/trip_type"
-import type { IntutrackData } from "../../../types/dashboard/trip_type"
+// import type { IntutrackData } from "../../../types/dashboard/trip_type"
 import type { RegistrationDbResponse } from "@/types/live/list_type"
 import { fetchRegistrationFromDb, refreshRegistrationDetails } from "../../../data/live/list"
 import { reverseGeocode } from "../../reversegeocoding"
@@ -33,10 +33,10 @@ export function TripDetailsModal({
   open,
   onOpenChange,
   selectedTrip,
-}: Omit<TripDetailsModalProps, "intutrackData" | "loadingIntutrack" | "handleRefreshIntutrack" | "getStatusColor">) {
-  const [activeTab, setActiveTab] = useState<"stops" | "trip" | "registration" | "intutrack">("stops")
-  const [intutrackData, setIntutrackData] = useState<IntutrackData | null>(null)
-  const [loadingIntutrack, setLoadingIntutrack] = useState(false)
+}: Omit<TripDetailsModalProps, "getStatusColor">) {
+  const [activeTab, setActiveTab] = useState<"stops" | "trip" | "registration">("stops")
+  // const [intutrackData, setIntutrackData] = useState<IntutrackData | null>(null)
+  // const [loadingIntutrack, setLoadingIntutrack] = useState(false)
   const [dbData, setDbData] = useState<RegistrationDbResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -51,31 +51,31 @@ export function TripDetailsModal({
   }, [open])
 
   // Fetch intutrack data when details modal opens and vendor is Intugine
-  useEffect(() => {
-    if (open && selectedTrip?.gps_vendor === "Intugine") {
-      setLoadingIntutrack(true)
-      fetchIntutrackData(selectedTrip.id)
-        .then((data) => setIntutrackData(data))
-        .catch(() => setIntutrackData(null))
-        .finally(() => setLoadingIntutrack(false))
-    } else {
-      setIntutrackData(null)
-      setLoadingIntutrack(false)
-    }
-  }, [open, selectedTrip])
+  // useEffect(() => {
+  //   if (open && selectedTrip?.gps_vendor === "Intugine") {
+  //     setLoadingIntutrack(true)
+  //     fetchIntutrackData(selectedTrip.id)
+  //       .then((data) => setIntutrackData(data))
+  //       .catch(() => setIntutrackData(null))
+  //       .finally(() => setLoadingIntutrack(false))
+  //   } else {
+  //     setIntutrackData(null)
+  //     setLoadingIntutrack(false)
+  //   }
+  // }, [open, selectedTrip])
 
-  const handleRefreshIntutrack = async () => {
-    if (!selectedTrip) return
-    setLoadingIntutrack(true)
-    try {
-      const data = await refreshIntutrackData(selectedTrip.id)
-      setIntutrackData(data)
-    } catch {
-      // ignore error
-    } finally {
-      setLoadingIntutrack(false)
-    }
-  }
+  // const handleRefreshIntutrack = async () => {
+  //   if (!selectedTrip) return
+  //   setLoadingIntutrack(true)
+  //   try {
+  //     const data = await refreshIntutrackData(selectedTrip.id)
+  //     setIntutrackData(data)
+  //   } catch {
+  //     // ignore error
+  //   } finally {
+  //     setLoadingIntutrack(false)
+  //   }
+  // }
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -187,7 +187,7 @@ export function TripDetailsModal({
   }, [open, selectedTrip, activeTab])
 
   // Handle tab change and load registration data if needed
-  const handleTabChange = async (tab: "stops" | "trip" | "registration" | "intutrack") => {
+  const handleTabChange = async (tab: "stops" | "trip" | "registration") => {
     setActiveTab(tab)
 
     // Load registration data when registration tab is selected for the first time
@@ -585,7 +585,7 @@ export function TripDetailsModal({
                 Registration Details
               </div>
             </button>
-            {selectedTrip?.gps_vendor === "Intugine" && (
+            {/* {selectedTrip?.gps_vendor === "Intugine" && (
               <button
                 onClick={() => handleTabChange("intutrack")}
                 className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === "intutrack"
@@ -598,7 +598,7 @@ export function TripDetailsModal({
                   Intugine Details
                 </div>
               </button>
-            )}
+            )} */}
           </nav>
         </div>
 
@@ -846,7 +846,7 @@ export function TripDetailsModal({
 
           {selectedTrip && activeTab === "registration" && renderRegistrationDetails()}
 
-          {selectedTrip && selectedTrip.gps_vendor === "Intugine" && activeTab === "intutrack" && (
+          {/* {selectedTrip && selectedTrip.gps_vendor === "Intugine" && activeTab === "intutrack" && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Intugine Details</h3>
@@ -874,9 +874,9 @@ export function TripDetailsModal({
                     <div>
                       <strong>Current Consent:</strong> {intutrackData.consent}
                     </div>
-                    {/* <div>
+                    <div>
                       <strong>Consent:</strong> {intutrackData.consent}
-                    </div> */}
+                    </div>
                     <div>
                       <strong>Last Consent:</strong> {formatDate(intutrackData.updated_at)}
                     </div>
@@ -889,7 +889,7 @@ export function TripDetailsModal({
                 <p className="text-center text-gray-500 py-8">No Intugine data available</p>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </motion.div>
     </motion.div>

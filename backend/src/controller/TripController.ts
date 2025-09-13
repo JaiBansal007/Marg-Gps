@@ -21,7 +21,6 @@ import {
   gps_schema,
   alert_shipment_relation,
   alert,
-  intutrack_relation,
   usersTable,
   alarm,
 } from "../db/schema";
@@ -1243,15 +1242,15 @@ export async function insertData(data: any) {
     })
     .$returningId();
 
-  // Only call Intutrack API if GPS vendor is "Intugine" and driver mobile number exists
-  if (gpsDetails.GPSVendor === "Intugine" && equipmentData.DriverMobileNo) {
-    try {
-      await saveIntutrackDetails(equipmentData.DriverMobileNo);
-    } catch (error) {
-      console.warn("Failed to save Intutrack details:", error);
-      // Don't fail the entire trip creation if Intutrack fails
-    }
-  }
+  // // Only call Intutrack API if GPS vendor is "Intugine" and driver mobile number exists
+  // if (gpsDetails.GPSVendor === "Intugine" && equipmentData.DriverMobileNo) {
+  //   try {
+  //     await saveIntutrackDetails(equipmentData.DriverMobileNo);
+  //   } catch (error) {
+  //     console.warn("Failed to save Intutrack details:", error);
+  //     // Don't fail the entire trip creation if Intutrack fails
+  //   }
+  // }
 
   const eventData = shipmentData.Events.Event;
   const eventid = await db
@@ -1377,73 +1376,73 @@ export async function insertData(data: any) {
 }
 
 // Helper function to save Intutrack details
-export async function saveIntutrackDetails(phoneNumber: string) {
-  if (!phoneNumber) return;
+// export async function saveIntutrackDetails(phoneNumber: string) {
+//   if (!phoneNumber) return;
 
-  try {
-    // Call Intutrack API
-    const intutrackResponse = await fetch(
-      `${process.env.INTUTRACK_API_URL}/consents?tel=${phoneNumber}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Basic ${process.env.INTUTRACK_BASE_AUTH}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+//   try {
+//     // Call Intutrack API
+//     const intutrackResponse = await fetch(
+//       `${process.env.INTUTRACK_API_URL}/consents?tel=${phoneNumber}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Basic ${process.env.INTUTRACK_BASE_AUTH}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
 
-    if (!intutrackResponse.ok) {
-      throw new Error(
-        `Intutrack API failed with status: ${intutrackResponse.status}`
-      );
-    }
+//     if (!intutrackResponse.ok) {
+//       throw new Error(
+//         `Intutrack API failed with status: ${intutrackResponse.status}`
+//       );
+//     }
 
-    const apiData = await intutrackResponse.json();
+//     const apiData = await intutrackResponse.json();
 
-    if (!apiData || !Array.isArray(apiData) || apiData.length === 0) {
-      console.log(`No consent data found for phone: ${phoneNumber}`);
-      return;
-    }
+//     if (!apiData || !Array.isArray(apiData) || apiData.length === 0) {
+//       console.log(`No consent data found for phone: ${phoneNumber}`);
+//       return;
+//     }
 
-    const consentData = apiData[0].result;
+//     const consentData = apiData[0].result;
 
-    // Check if record already exists
-    const existingRecord = await db
-      .select()
-      .from(intutrack_relation)
-      .where(eq(intutrack_relation.phone_number, phoneNumber))
-      .limit(1);
+//     // Check if record already exists
+//     const existingRecord = await db
+//       .select()
+//       .from(intutrack_relation)
+//       .where(eq(intutrack_relation.phone_number, phoneNumber))
+//       .limit(1);
 
-    if (existingRecord.length > 0) {
-      // Update existing record
-      await db
-        .update(intutrack_relation)
-        .set({
-          current_consent: consentData.current_consent,
-          consent: consentData.consent,
-          operator: consentData.operator,
-        })
-        .where(eq(intutrack_relation.phone_number, phoneNumber));
-    } else {
-      // Insert new record
-      await db.insert(intutrack_relation).values({
-        phone_number: phoneNumber,
-        current_consent: consentData.current_consent,
-        consent: consentData.consent,
-        operator: consentData.operator,
-      });
-    }
+//     if (existingRecord.length > 0) {
+//       // Update existing record
+//       await db
+//         .update(intutrack_relation)
+//         .set({
+//           current_consent: consentData.current_consent,
+//           consent: consentData.consent,
+//           operator: consentData.operator,
+//         })
+//         .where(eq(intutrack_relation.phone_number, phoneNumber));
+//     } else {
+//       // Insert new record
+//       await db.insert(intutrack_relation).values({
+//         phone_number: phoneNumber,
+//         current_consent: consentData.current_consent,
+//         consent: consentData.consent,
+//         operator: consentData.operator,
+//       });
+//     }
 
-    console.log(`Intutrack details saved for phone: ${phoneNumber}`);
-  } catch (error) {
-    console.error(
-      `Error saving Intutrack details for phone ${phoneNumber}:`,
-      error
-    );
-    throw error;
-  }
-}
+//     console.log(`Intutrack details saved for phone: ${phoneNumber}`);
+//   } catch (error) {
+//     console.error(
+//       `Error saving Intutrack details for phone ${phoneNumber}:`,
+//       error
+//     );
+//     throw error;
+//   }
+// }
 
 //working
 export async function getAllCustomers(page = 1, limit = 100) {
@@ -2049,9 +2048,9 @@ export async function getTripsByCustomerGroups(
       }
     }
 
-    // 10. Get Intutrack data for Intugine vendors
-    const intutrackRows = await db.select().from(intutrack_relation);
-    const intutrackMap = new Map(intutrackRows.map((i) => [i.phone_number, i]));
+    // // 10. Get Intutrack data for Intugine vendors
+    // const intutrackRows = await db.select().from(intutrack_relation);
+    // const intutrackMap = new Map(intutrackRows.map((i) => [i.phone_number, i]));
 
     // 11. Build response
     const trips = await Promise.all(
@@ -2298,23 +2297,23 @@ export async function getTripsByCustomerGroups(
 
         console.log("Status Durations:", statusDurations);
 
-        // Get Intutrack data if GPS vendor is Intugine
-        let intutrackData = null;
-        if (
-          gpsDetailsRow?.gps_vendor === "Intugine" &&
-          equip?.driver_mobile_no
-        ) {
-          const intutrack = intutrackMap.get(equip.driver_mobile_no);
-          if (intutrack) {
-            intutrackData = {
-              consent_status: intutrack.current_consent,
-              last_updated_time: intutrack.updated_at
-                ? formatDate(new Date(intutrack.updated_at).toISOString())
-                : "",
-              operator: intutrack.operator,
-            };
-          }
-        }
+        // // Get Intutrack data if GPS vendor is Intugine
+        // let intutrackData = null;
+        // if (
+        //   gpsDetailsRow?.gps_vendor === "Intugine" &&
+        //   equip?.driver_mobile_no
+        // ) {
+        //   const intutrack = intutrackMap.get(equip.driver_mobile_no);
+        //   if (intutrack) {
+        //     intutrackData = {
+        //       consent_status: intutrack.current_consent,
+        //       last_updated_time: intutrack.updated_at
+        //         ? formatDate(new Date(intutrack.updated_at).toISOString())
+        //         : "",
+        //       operator: intutrack.operator,
+        //     };
+        //   }
+        // }
 
         // Process stops
         const processedStops = await Promise.all(
@@ -2475,7 +2474,7 @@ export async function getTripsByCustomerGroups(
           gps_unit_id: gpsDetailsRow?.gps_unit_id || "",
           gps_vendor: gpsDetailsRow?.gps_vendor || "",
           shipment_source: "logifriet",
-          intutrack_data: intutrackData,
+          // intutrack_data: intutrackData,
           stops: processedStops,
         };
       })

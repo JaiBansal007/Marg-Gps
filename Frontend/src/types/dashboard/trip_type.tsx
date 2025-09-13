@@ -122,14 +122,14 @@ export interface AlertResponse {
   alerts: AlertDetail[]
 }
 
-export interface IntutrackData {
-  id: number
-  phone_number: string
-  current_consent: string
-  consent: string
-  operator: string
-  updated_at: string
-}
+// export interface IntutrackData {
+//   id: number
+//   phone_number: string
+//   current_consent: string
+//   consent: string
+//   operator: string
+//   updated_at: string
+// }
 
 export type ViewMode = "list" | "map"
 export type MapMode = "current" | "actual"
@@ -179,9 +179,9 @@ export interface TripDetailsModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   selectedTrip: TripApi | null
-  intutrackData: IntutrackData | null
-  loadingIntutrack: boolean
-  handleRefreshIntutrack: () => void
+  // intutrackData: IntutrackData | null
+  // loadingIntutrack: boolean
+  // handleRefreshIntutrack: () => void
   getStatusColor: (status: string) => string
 
 }

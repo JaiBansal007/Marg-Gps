@@ -570,9 +570,9 @@ export const exportReportAsCSV = (
         "GPS Unit ID",
         "GPS Vendor",
         "Shipment Source",
-        "Intutrack Consent Status",
-        "Intutrack Last Updated",
-        "Intutrack Operator",
+        // "Intutrack Consent Status",
+        // "Intutrack Last Updated",
+        // "Intutrack Operator",
       ]
       csvContent += basicHeaders.join(",") + "\n"
 
@@ -613,9 +613,9 @@ export const exportReportAsCSV = (
         `"${trip.gps_unit_id}"`,
         `"${trip.gps_vendor}"`,
         `"${trip.shipment_source}"`,
-        `"${trip.intutrack_data?.consent_status || ""}"`,
-        `"${trip.intutrack_data?.last_updated_time || ""}"`,
-        `"${trip.intutrack_data?.operator || ""}"`,
+        // `"${trip.intutrack_data?.consent_status || ""}"`,
+        // `"${trip.intutrack_data?.last_updated_time || ""}"`,
+        // `"${trip.intutrack_data?.operator || ""}"`,
       ]
       csvContent += basicRow.join(",") + "\n\n"
 

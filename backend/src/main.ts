@@ -17,7 +17,6 @@ import { GPSProducer } from './kafka/producers/GPSproducer';
 import cookieParser from 'cookie-parser';
 import Vahnrouter from './routes/vahn';
 import alarmRouter from './routes/alarm';
-import intutrackRouter from './routes/intutrack';
 import alertRouter from './routes/alert';
 import TrailRouter from './routes/trail';
 import bodyParser from 'body-parser';
@@ -76,7 +75,6 @@ app.use(customerRouter);
 app.use(GeoFenceRouter);
 app.use(Vahnrouter)
 app.use(alarmRouter);
-app.use(intutrackRouter)
 app.use(alertRouter);
 app.use(TrailRouter);
 app.use(reportRouter);

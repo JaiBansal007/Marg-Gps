@@ -132,7 +132,7 @@ export function TripSummaryDetailsModal({ open, onClose, tripData }: TripSummary
             </div>
 
             {/* GPS & Tracking Info */}
-            {tripData.intutrack_data && (
+            {/* {tripData.intutrack_data && (
               <div className="mb-8">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tracking Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -156,7 +156,7 @@ export function TripSummaryDetailsModal({ open, onClose, tripData }: TripSummary
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Trip Metrics */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">

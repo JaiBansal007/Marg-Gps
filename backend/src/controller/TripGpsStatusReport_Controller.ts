@@ -19,7 +19,6 @@ import {
   customer_group_relation, 
   customer_lr_detail,
   gps_schema,
-  intutrack_relation,
   gps_details
 } from '../db/schema';
 import { eq, and, between, inArray, sql, desc, asc } from 'drizzle-orm';
@@ -201,33 +200,33 @@ export class TripGpsStatusReportController {
 
     // Get Intutrack consent information if GPS vendor is intutrack
     let consentInfo = null;
-    if (gpsVendorInfo.length > 0 && gpsVendorInfo[0].gps_vendor?.toLowerCase().includes('intutrack')) {
-      // Get driver phone from equipment to check consent
-      const driverInfo = await db
-        .select({
-          driver_mobile_no: equipment.driver_mobile_no
-        })
-        .from(equipment)
-        .where(eq(equipment.shipment_id, shipmentData.shipment_id))
-        .limit(1);
+    // if (gpsVendorInfo.length > 0 && gpsVendorInfo[0].gps_vendor?.toLowerCase().includes('intutrack')) {
+    //   // Get driver phone from equipment to check consent
+    //   const driverInfo = await db
+    //     .select({
+    //       driver_mobile_no: equipment.driver_mobile_no
+    //     })
+    //     .from(equipment)
+    //     .where(eq(equipment.shipment_id, shipmentData.shipment_id))
+    //     .limit(1);
 
-      if (driverInfo.length > 0 && driverInfo[0].driver_mobile_no) {
-        const consent = await db
-          .select({
-            current_consent: intutrack_relation.current_consent,
-            updated_at: intutrack_relation.updated_at,
-            operator: intutrack_relation.operator
-          })
-          .from(intutrack_relation)
-          .where(eq(intutrack_relation.phone_number, driverInfo[0].driver_mobile_no))
-          .orderBy(desc(intutrack_relation.updated_at))
-          .limit(1);
+    //   if (driverInfo.length > 0 && driverInfo[0].driver_mobile_no) {
+    //     const consent = await db
+    //       .select({
+    //         current_consent: intutrack_relation.current_consent,
+    //         updated_at: intutrack_relation.updated_at,
+    //         operator: intutrack_relation.operator
+    //       })
+    //       .from(intutrack_relation)
+    //       .where(eq(intutrack_relation.phone_number, driverInfo[0].driver_mobile_no))
+    //       .orderBy(desc(intutrack_relation.updated_at))
+    //       .limit(1);
 
-        if (consent.length > 0) {
-          consentInfo = consent[0];
-        }
-      }
-    }
+    //     if (consent.length > 0) {
+    //       consentInfo = consent[0];
+    //     }
+    //   }
+    // }
 
     const commonInfo: CommonTripInfo = {
       shipment_id: shipmentData.shipment_external_id,
@@ -243,11 +242,11 @@ export class TripGpsStatusReportController {
     };
 
     // Add consent information if available
-    if (consentInfo) {
-      commonInfo.consent_status = consentInfo.current_consent ?? undefined;
-      commonInfo.last_updated_time = consentInfo.updated_at?.toISOString() || '';
-      commonInfo.operator = consentInfo.operator;
-    }
+    // if (consentInfo) {
+    //   commonInfo.consent_status = consentInfo.current_consent ?? undefined;
+    //   commonInfo.last_updated_time = consentInfo.updated_at?.toISOString() || '';
+    //   commonInfo.operator = consentInfo.operator;
+    // }
 
     return commonInfo;
   }
