@@ -6,9 +6,6 @@ import axios from "axios";
 
 const db = drizzle(process.env.DATABASE_URL!);
 
-// Store last En-Route notification timestamps per vehicle
-const lastEnRouteNotification = new Map<string, number>();
-
 // Helper: Haversine distance in meters
 function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
   const toRad = (v: number) => (v * Math.PI) / 180;
@@ -21,68 +18,6 @@ function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
       Math.cos(toRad(lat2)) *
       Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-// Helper: Check if vehicle should send En-Route notification
-function shouldSendEnRouteNotification(trailerNumber: string, gpsFrequency: number): boolean {
-  const now = Date.now();
-  const lastNotification = lastEnRouteNotification.get(trailerNumber) || 0;
-  const intervalMs = (gpsFrequency / 100) * 1000; // Convert frequency to milliseconds (e.g., 3600 -> 36 seconds)
-  
-  return (now - lastNotification) >= intervalMs;
-}
-
-// Helper: Send En-Route notification
-async function sendEnRouteNotification(vehicleData: any, activeShipment: any) {
-
-
-  const domainName = activeShipment.domain_name || 'MM/ASOBEXE';
-
-  const xmlData = `<TransmissionDetails>
-    <Shipment>
-      <Domain_Name>MM/ASOBEXE</Domain_Name>
-      <Equipment>
-        <Equipment_Id>${vehicleData.trailerNumber}</Equipment_Id>
-      </Equipment>
-      <Events>
-        <Event>
-          <EventCode>En-Route</EventCode>
-          <EventDateTime>${new Date().toISOString()}</EventDateTime>
-        </Event>
-      </Events>
-      <GPSDetails>
-        <GPSUnitID>${vehicleData.GPSVendor}</GPSUnitID>
-        <GPSVendor>${vehicleData.GPSVendor}</GPSVendor>
-      </GPSDetails>
-      <Shipment_Id>${activeShipment.shipment_id}</Shipment_Id>
-      <Stops>
-        <Stop>
-          <Latitude>${vehicleData.latitude}</Latitude>
-          <Longitude>${vehicleData.longitude}</Longitude>
-        </Stop>
-      </Stops>
-    </Shipment>
-  </TransmissionDetails>`;
-
-  try {
-    await axios.post(
-      process.env.ENTER_API_URL!,
-      xmlData,
-      {
-        headers: {
-          'X-ShipX-API-Key': process.env.ENTER_API_KEY!,
-          'Content-Type': 'application/xml',
-          'Cookie': process.env.ENTER_API_COOKIE!
-        }
-      }
-    );
-    
-    // Update last notification timestamp
-    lastEnRouteNotification.set(vehicleData.trailerNumber, Date.now());
-    console.log('🚛 En-Route notification sent for vehicle:', vehicleData.trailerNumber);
-  } catch (err: any) {
-    console.error('❌ Failed to send En-Route notification:', (err && err.response && err.response.data) || err?.message || err);
-  }
 }
 
 export async function insertGpsData(d: any) {
@@ -226,52 +161,6 @@ export async function insertGpsData(d: any) {
                   actual_sequence: st.actual_sequence || maxActualSeq + 1
                 })
                 .where(eq(stop.id, st.id));
-
-              const domainName = activeShipment.domain_name;
-
-              const xmlData = `<TransmissionDetails>
-                <Shipment>
-                  <Domain_Name>${domainName}</Domain_Name>
-                  <Equipment>
-                    <Equipment_Id>${v.trailerNumber}</Equipment_Id>
-                  </Equipment>
-                  <Events>
-                    <Event>
-                      <EventCode>Vehicle Reached</EventCode>
-                      <EventDateTime>${new Date().toISOString()}</EventDateTime>
-                    </Event>
-                  </Events>
-                  <GPSDetails>
-                    <GPSUnitID>${v.GPSVendor}</GPSUnitID>
-                    <GPSVendor>${v.GPSVendor}</GPSVendor>
-                  </GPSDetails>
-                  <Shipment_Id>${activeShipment.shipment_id}</Shipment_Id>
-                  <Stops>
-                    <Stop>
-                      <Latitude>${v.latitude}</Latitude>
-                      <Location_Id>${st.location_id || st.id}</Location_Id>
-                      <Longitude>${v.longitude}</Longitude>
-                    </Stop>
-                  </Stops>
-                </Shipment>
-              </TransmissionDetails>`;
-
-              try {
-                await axios.post(
-                  process.env.ENTER_API_URL!,
-                  xmlData,
-                  {
-                    headers: {
-                      'X-ShipX-API-Key': process.env.ENTER_API_KEY!,
-                      'Content-Type': 'application/xml',
-                      'Cookie': process.env.ENTER_API_COOKIE!
-                    }
-                  }
-                );
-                console.log('🚚 Vehicle entered geofence, external API notified.');
-              } catch (err: any) {
-                console.error('❌ Failed to notify external API:', (err && err.response && err.response.data) || err?.message || err);
-              }
             }
             // Exit event: was inside, now outside
             else if (wasInside && !inside) {
@@ -280,60 +169,8 @@ export async function insertGpsData(d: any) {
                   exit_time: new Date().toISOString()
                 })
                 .where(eq(stop.id, st.id));
-
-              const domainName = activeShipment.domain_name || 'MM/ASOBEXE';
-
-              const xmlData = `<TransmissionDetails>
-                <Shipment>
-                  <Domain_Name>${domainName}</Domain_Name>
-                  <Equipment>
-                    <Equipment_Id>${v.trailerNumber}</Equipment_Id>
-                  </Equipment>
-                  <Events>
-                    <Event>
-                      <EventCode>Vehicle Exited</EventCode>
-                      <EventDateTime>${new Date().toISOString()}</EventDateTime>
-                    </Event>
-                  </Events>
-                  <GPSDetails>
-                    <GPSUnitID>${v.GPSVendor}</GPSUnitID>
-                    <GPSVendor>${v.GPSVendor}</GPSVendor>
-                  </GPSDetails>
-                  <Shipment_Id>${activeShipment.shipment_id}</Shipment_Id>
-                  <Stops>
-                    <Stop>
-                      <Latitude>${v.latitude}</Latitude>
-                      <Location_Id>${st.location_id || st.id}</Location_Id>
-                      <Longitude>${v.longitude}</Longitude>
-                    </Stop>
-                  </Stops>
-                </Shipment>
-              </TransmissionDetails>`;
-
-              try {
-                await axios.post(
-                  process.env.ENTER_API_URL!,
-                  xmlData,
-                  {
-                    headers: {
-                      'X-ShipX-API-Key': process.env.ENTER_API_KEY!,
-                      'Content-Type': 'application/xml',
-                      'Cookie': process.env.ENTER_API_COOKIE!
-                    }
-                  }
-                );
-                console.log('🚚 Vehicle exited geofence, external API notified.');
-              } catch (err: any) {
-                console.error('❌ Failed to notify external API:', err?.response?.data || err.message);
-              }
             }
           }
-        }
-
-        // ✅ NEW: En-Route Logic - Send notification if vehicle is not inside any geofence
-        // and is active (has an active shipment) and enough time has passed based on GPS frequency
-        if (!isInsideAnyGeofence && shouldSendEnRouteNotification(v.trailerNumber, gpsFrequency)) {
-          await sendEnRouteNotification(v, activeShipment);
         }
       }
 
