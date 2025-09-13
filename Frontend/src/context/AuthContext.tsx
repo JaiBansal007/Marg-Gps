@@ -79,43 +79,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (!PUBLIC_ROUTES.includes(location.pathname)) {
         sessionStorage.setItem('redirectPath', location.pathname);
       }
-      const authenticatedtoken = Cookies.get("access_token")||"";
 
-      if(authenticatedtoken&&!user&&!token&&false){
-        try {
-          console.log("Checking SSO token validity")
-          console.log("SSO URL:", import.meta.env.VITE_SSO_URL)
-          const isok = await axios.post(
-            `${import.meta.env.VITE_SSO_URL}/oauth/check_token`, // Replace with your auth service URL
-            new URLSearchParams({ authenticatedtoken }), // x-www-form-urlencoded body
-            {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-            }
-          );
-          const userDataResp = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user?${isok.data.user_name}`);
-          // console.log(userDataResp.data);
-          // const userDataResp = userData[0];
-          Cookies.set("authToken", userDataResp.data.token, { 
-            expires: 1, // 1 day
-            secure: true, // Only sent over HTTPS
-            sameSite: 'strict' // Prevents CSRF
-          })
-
-          Cookies.set("userData", JSON.stringify(userDataResp.data), { 
-            expires: 1,
-            secure: true,
-            sameSite: 'strict'
-          })
-        } catch (error) {
-          console.error("Error during SSO token check:", error)
-        }
-      }
-      // localStorage.getItem("access_token")
       if (token && userData ) {
         try {
           const parsedUser = JSON.parse(userData)
           
-
           apiClient.get(`/user/id/${parsedUser.id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`
@@ -136,9 +104,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             localStorage.removeItem("rememberMe")
             
             // Only redirect to signin if user is on a protected route
-            console.log("Redirecting to SSO login page due to invalid session")
             if (!PUBLIC_ROUTES.includes(location.pathname)) {
-              window.location.href = `${import.meta.env.VITE_SSO_LOGIN_PAGE_URL}`;
+              window.location.href = "/signin";
             }
           })
           .finally(() => {
@@ -162,8 +129,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Only redirect if not loading, not authenticated, not already on a public route
     if (!loading && !user && !PUBLIC_ROUTES.includes(location.pathname)) {
-      // We don't need to set redirectPath here since it's already set in the initial useEffect
-     window.location.href = `${import.meta.env.VITE_SSO_LOGIN_PAGE_URL}`;
+      window.location.href = "/signin";
     }
   }, [user, location.pathname, navigate, loading])
 
@@ -228,18 +194,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
-  const logout = async() => {
+  const logout = async () => {
     setIsLoggingOut(true)
     setUser(null)
-    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/logout`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("access_token") || ""}`,
-      },
-    })
+    try {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/logout`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("access_token") || ""}`,
+        },
+      })
+    } catch (error) {
+      console.error("Logout API error:", error)
+      // Proceed anyway
+    }
     Cookies.remove("authToken")
     Cookies.remove("userData")
     delete apiClient.defaults.headers.common["Authorization"]
-    window.location.href = `${import.meta.env.VITE_SSO_LOGIN_PAGE_URL}`;
+    window.location.href = "/signin";
     showSuccessToast("Logout Successful", `${user?.name} you have been logged out.`)
 
     setTimeout(() => {
