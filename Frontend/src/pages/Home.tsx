@@ -106,7 +106,7 @@ export default function LandingPage() {
               >
                 <div className="space-y-3">
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
-                    Unified GPS Platform for{" "}
+                    M-GPS Platform for{" "}
                     <span className="text-[#d5233b] dark:text-[#ff6b7d]">Logistics Services</span>
                   </h1>
                   <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
