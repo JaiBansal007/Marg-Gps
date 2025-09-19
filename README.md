@@ -41,8 +41,43 @@ The system is designed for scalability, modularity, and ease of deployment, maki
    ```
 2. **Create a `.env` file** in the `backend` directory and add:
    ```env
-   DATABASE_URL=your-database-url-here
-   JWT_SECRET=your-secret-key-here
+        # ──────────────── Server Configuration ────────────────
+        PORT=3000
+        API_URL=
+        JWT_SECRET=
+
+        # ──────────────── Database Configuration ──────────────
+        DATABASE_URL=
+        DB_HOST=
+        DB_PORT=
+        DB_USER=
+        DB_PASSWORD=
+        DB_NAME=
+
+        # ──────────────── Kafka Configuration ─────────────────
+        KAFKA_BROKERS=localhost:9092
+        KAFKA_TOPIC=api-data-topic
+
+        # ──────────────── Third-Party APIs ────────────────────
+        # LocationIQ
+        REVERSE_PROXY_URL=
+        # OLA API
+        OLA_API_KEY=
+
+        # ──────────────── Email Configuration ─────────────────
+        EMAIL_HOST=
+        EMAIL_PORT=465
+        EMAIL_SECURE=true
+        EMAIL_USER=
+        EMAIL_PASSWORD=
+        EMAIL_FROM=
+
+        # ──────────────── Alert Processing ────────────────────
+        ENABLE_ALERT_PROCESSING=true
+        # Interval in milliseconds (e.g. 20 minutes)
+        ALERT_PROCESSING_INTERVAL=1200000
+        ALERT_BATCH_SIZE=100
+
    ```
    Replace with your actual values.
 
@@ -109,12 +144,6 @@ If you make changes to the backend database schema:
 
 ---
 
-## ⚠️ Important Notes
-- Do **not** modify the `drizzle` files in the backend.
-- Never commit your actual `.env` files to version control.
-- Tailwind CSS is pre-configured in the frontend.
-
----
 
 ## Team Details
 
