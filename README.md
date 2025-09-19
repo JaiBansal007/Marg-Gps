@@ -18,16 +18,33 @@ MARG is a unified GPS platform transforming government logistics with real-time 
 - **Comprehensive Reports & Export**
 - **Email Notifications & Alerts**
 
-## 📝 Project Overview
+## 📌 Project Overview
 
-This project is a full-stack solution designed for real-time vehicle tracking, alert management, and logistics monitoring. It consists of:
+### 🖥️ Frontend
+- Built with **React + TailwindCSS** for a clean, responsive, and modern UI.  
+- **Role-based access control** with page/group-specific permissions for departments, vendors, and admins.  
+- Features **real-time dashboards**, **trip & vehicle analytics**, **geofenced overlays**, and **exportable reports**.  
+- Includes **light/dark mode**, **lazy loading**, and **code-splitting** for optimized performance.  
 
-- **Backend**: A Node.js/TypeScript API server that handles GPS data ingestion, alert processing (such as geofence, overspeeding, stoppage, and more), user and entity management, and database operations. It supports real-time data processing and provides RESTful APIs for the frontend.
-- **Frontend**: A modern React/TypeScript web application (built with Vite and styled using Tailwind CSS) that provides dashboards, live tracking, alert visualization, and user management interfaces for logistics and fleet operations.
-
-The system is designed for scalability, modularity, and ease of deployment, making it suitable for logistics companies, fleet operators, or any scenario requiring live vehicle monitoring and alerting.
+### ⚙️ Backend
+- Powered by **Node.js + Express** for scalable RESTful API development.  
+- Handles **50,000+ GPS & shipment events/day** via **RESTful APIs** and **TMS triggers** ensuring end-to-end trip coverage.  
+- **Kafka-based event pipeline** processes **1M+ location updates/day** with **99.99% uptime** and low latency.  
+- Database: **MySQL** with **Drizzle ORM indexing**, improving query performance by **70%** for real-time operations.  
+- Implements **geofencing, smart alerts (speeding, route deviation, GPS loss)** and **historical trip replay**.  
+- Secure **authentication**, **vendor/customer grouping**, and **bulk operations APIs** for large-scale fleet management.
 
 ---
+
+## 🛠️ Key Features
+- **Real-time trip & vehicle analytics** – ETAs, stoppages, speed, and drive time.  
+- **Fullscreen satellite & geofenced overlays** for dynamic live tracking.  
+- **7 Smart Alerts** – Speeding, GPS Loss, Route Deviation, etc., with **automatic email notifications**.  
+- **Historical path plotting** with speed, address, and timestamp.  
+- **Role-based access control** and **page/group-specific permissions**.  
+- **Bulk Excel upload/edit/delete** and **multi-select actions**.  
+- **5 report types with filter-based Excel exports** across all analytics views.  
+- **Light/Dark mode toggle** for better accessibility.  
 
 
 ## 🛠 Setup Instructions
