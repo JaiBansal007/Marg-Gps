@@ -18,6 +18,15 @@ MARG is a unified GPS platform transforming government logistics with real-time 
 - **Comprehensive Reports & Export**
 - **Email Notifications & Alerts**
 
+
+## 🏗️ Architecture
+
+The following diagram illustrates the high-level architecture of the MARG platform, showing the interaction between frontend, backend, data processing, and storage components:
+
+![MARG Architecture](code/docs/architecture.png)
+
+---
+
 ## 📌 Project Overview
 
 ### 🖥️ Frontend
