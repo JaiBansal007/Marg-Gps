@@ -165,8 +165,28 @@ If you make changes to the backend database schema:
 ---
 
 ## 🎨 Tech Stack
-- **Backend**: Node.js, TypeScript, Drizzle ORM
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS
+
+### Frontend
+- **React.js + Vite** (UI framework and bundler)
+- **Tailwind CSS + shadcn/ui** (styling & components)
+- **Axios** (API communication)
+- **Recharts** (visual analytics & reports)
+
+### Backend
+- **Node.js / Express.js** (RESTful API server)
+- **Kafka** (event streaming & ingestion pipeline for GPS/shipment data)
+- **Redis** (caching & fast state management)
+- **Drizzle ORM + MySQL** (database layer with optimized indexing)
+
+### Data & Integration
+- **RESTful APIs** (ingestion of 50,000+ GPS & shipment events/day from vendor feeds and TMS)
+- **Kafka Consumer/Producer** (processing 1M+ location updates/day with low latency)
+- **Geofencing & Alerts Engine** (event-driven anomaly detection like speeding, GPS loss, route deviation)
+
+### Infrastructure & Deployment
+- **Docker** (containerized deployment)
+- **Vercel / Nginx** (frontend hosting & reverse proxy)
+- **CI/CD pipelines** (automated deployments)
 
 ---
 
