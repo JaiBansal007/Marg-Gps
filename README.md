@@ -208,13 +208,13 @@ If you make changes to the backend database schema:
 
 ## Project Links
 
-- **SIH Presentation:** [Final SIH Presentation](URL TO PPT UPLOADED TO GITHUB)
+- **SIH Presentation:** [Final SIH Presentation](code/docs/Tree.io-SIH.pptx.pdf)
 - **Video Demonstration:** [Watch Video](UNLISTED YOUTUBE LINK)
 - **Live Deployment:** [View Deployment](DEPLOYED LINK IF ANY)
 - **Source Code:** [GitHub Repository](https://github.com/TusharSachdeva29/sih-25)
 - **Additional Resources:** 
     - **Real-Time Fleet Tracking Systems:** [ResearchGate: Fleet Management with GPS](https://www.researchgate.net/publication/332938511_Confrontation_between_Puyeo_and_Moyongoe_in_the_280s_and_the_East-Puyeo_Problem)
-    - **Event Streaming with Apache Kafka:** [ Confluent: Kafka in Transportation](https://www.confluent.io/blog/)
+    - **Event Streaming with Apache Kafka:** [Confluent: Kafka in Transportation](https://www.confluent.io/blog/)
     - **Predictive ETA and Route Optimization:** [IEEE: ETA Prediction Models](https://ieeexplore.ieee.org/document/9378320)
     - **Geofencing & Location Analytics:** [Esri — Geofencing & Real-time Tracking](https://www.esri.com/en-us/arcgis/products/arcgis-geoevent-server/overview)
     - **Digital Infrastructure for Smart Governance:** [UN E-Government Survey](https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2022)
