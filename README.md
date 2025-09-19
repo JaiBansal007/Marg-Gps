@@ -210,7 +210,6 @@ If you make changes to the backend database schema:
 
 - **SIH Presentation:** [Final SIH Presentation](code/docs/Tree.io-SIH.pptx.pdf)
 - **Video Demonstration:** [Watch Video](https://youtu.be/Dya2MEnw0RQ)
-- **Live Deployment:** [View Deployment](DEPLOYED LINK IF ANY)
 - **Source Code:** [GitHub Repository](https://github.com/TusharSachdeva29/sih-25)
 - **Additional Resources:** 
     - **Real-Time Fleet Tracking Systems:** [ResearchGate: Fleet Management with GPS](https://www.researchgate.net/publication/332938511_Confrontation_between_Puyeo_and_Moyongoe_in_the_280s_and_the_East-Puyeo_Problem)
