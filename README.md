@@ -193,7 +193,7 @@ If you make changes to the backend database schema:
 
 ## Team Details
 
-**Team Name:** Tree.io
+**Team Name:** Tree.io </br>
 **Team ID:** 101449
 
 **Team Leader:** [@Dhruv](https://github.com/Dhruv-Tuteja)
