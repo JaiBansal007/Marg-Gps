@@ -1,6 +1,33 @@
 ## 🚩 PS: Swadeshi for Atmanirbhar Bharat - Transportation & Logistics (25138)
 
-Submit your ideas to address the growing pressures on the city's resources, transport networks, and logistic infrastructure.
+---
+## Team Details
+
+**Team Name:** Tree.io </br>
+**Team ID:** 101449
+
+**Team Leader:** [@Dhruv](https://github.com/Dhruv-Tuteja)
+
+**Team Members:**
+
+- **MEMBER_1** - 2023UIN3332 - [@Dhruv](https://github.com/Dhruv-Tuteja)
+- **MEMBER_2** - 2023UCS1548 - [@Nayan](https://github.com/NASA12345)
+- **MEMBER_3** - 2023UCA1804 - [@Tushar](https://github.com/TusharSachdeva29)
+- **MEMBER_4** - 2023UCA1869 - [@Jai](https://github.com/JaiBansal007)
+- **MEMBER_5** - 2023UCA1728 - [@Yashaswini](https://github.com/Yashaswini-Sharma)
+- **MEMBER_6** - 2023UCA1600 - [@Rohan](https://github.com/RohanJ26)
+
+## Project Links
+
+- **SIH Presentation:** [Final SIH Presentation](code/docs/Tree.io-SIH.pptx.pdf)
+- **Video Demonstration:** [Watch Video](https://youtu.be/9bosGLp1mdE)
+- **Source Code:** [GitHub Repository](https://github.com/TusharSachdeva29/sih-25)
+- **Additional Resources:** 
+    - **Real-Time Fleet Tracking Systems:** [ResearchGate: Fleet Management with GPS](https://www.researchgate.net/publication/332938511_Confrontation_between_Puyeo_and_Moyongoe_in_the_280s_and_the_East-Puyeo_Problem)
+    - **Event Streaming with Apache Kafka:** [Confluent: Kafka in Transportation](https://www.confluent.io/blog/)
+    - **Predictive ETA and Route Optimization:** [IEEE: ETA Prediction Models](https://ieeexplore.ieee.org/document/9378320)
+    - **Geofencing & Location Analytics:** [Esri — Geofencing & Real-time Tracking](https://www.esri.com/en-us/arcgis/products/arcgis-geoevent-server/overview)
+    - **Digital Infrastructure for Smart Governance:** [UN E-Government Survey](https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2022)
 
 ---
 
@@ -187,34 +214,3 @@ If you make changes to the backend database schema:
 - **Docker** (containerized deployment)
 - **Vercel / Nginx** (frontend hosting & reverse proxy)
 - **CI/CD pipelines** (automated deployments)
-
----
-
-
-## Team Details
-
-**Team Name:** Tree.io </br>
-**Team ID:** 101449
-
-**Team Leader:** [@Dhruv](https://github.com/Dhruv-Tuteja)
-
-**Team Members:**
-
-- **MEMBER_1** - 2023UIN3332 - [@Dhruv](https://github.com/Dhruv-Tuteja)
-- **MEMBER_2** - 2023UCS1548 - [@Nayan](https://github.com/NASA12345)
-- **MEMBER_3** - 2023UCA1804 - [@Tushar](https://github.com/TusharSachdeva29)
-- **MEMBER_4** - 2023UCA1869 - [@Jai](https://github.com/JaiBansal007)
-- **MEMBER_5** - 2023UCA1728 - [@Yashaswini](https://github.com/Yashaswini-Sharma)
-- **MEMBER_6** - 2023UCA1600 - [@Rohan](https://github.com/RohanJ26)
-
-## Project Links
-
-- **SIH Presentation:** [Final SIH Presentation](code/docs/Tree.io-SIH.pptx.pdf)
-- **Video Demonstration:** [Watch Video](https://youtu.be/9bosGLp1mdE)
-- **Source Code:** [GitHub Repository](https://github.com/TusharSachdeva29/sih-25)
-- **Additional Resources:** 
-    - **Real-Time Fleet Tracking Systems:** [ResearchGate: Fleet Management with GPS](https://www.researchgate.net/publication/332938511_Confrontation_between_Puyeo_and_Moyongoe_in_the_280s_and_the_East-Puyeo_Problem)
-    - **Event Streaming with Apache Kafka:** [Confluent: Kafka in Transportation](https://www.confluent.io/blog/)
-    - **Predictive ETA and Route Optimization:** [IEEE: ETA Prediction Models](https://ieeexplore.ieee.org/document/9378320)
-    - **Geofencing & Location Analytics:** [Esri — Geofencing & Real-time Tracking](https://www.esri.com/en-us/arcgis/products/arcgis-geoevent-server/overview)
-    - **Digital Infrastructure for Smart Governance:** [UN E-Government Survey](https://publicadministration.un.org/egovkb/en-us/Reports/UN-E-Government-Survey-2022)
