@@ -31,7 +31,7 @@ const VehicleDetailsModal = ({ vehicle, onClose }: VehicleDetailsModalProps) => 
   const [activeTab, setActiveTab] = useState<"details" | "registration">("details")
   const [dbData, setDbData] = useState<RegistrationDbResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isRefreshing, _setIsRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hasLoadedDb, setHasLoadedDb] = useState(false)
   const [address, setAddress] = useState<string>("")

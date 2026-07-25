@@ -31,7 +31,7 @@ export function TripDetailsModal({
   const [activeTab, setActiveTab] = useState<"stops" | "trip" | "registration">("stops")
   const [dbData, setDbData] = useState<RegistrationDbResponse | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isRefreshing, _setIsRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hasLoadedDb, setHasLoadedDb] = useState(false)
   const [currentLocationAddress, setCurrentLocationAddress] = useState<string>("")

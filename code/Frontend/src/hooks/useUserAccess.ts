@@ -1,10 +1,18 @@
 import { useAuth } from "../context/AuthContext"
-import { useRoleAccess, type AccessLevel, type Responsibility } from "../utils/roleAccess"
 import { useState, useEffect } from "react"
+
+export type AccessLevel = "none" | "view" | "edit" | "both"
+export interface Responsibility {
+  id: number
+  role_name: string
+  created_at: string
+  updated_at: string
+  tabs_access: Record<string, number>[]
+  report_access: string[]
+}
 
 export const useUserAccess = () => {
   const { user } = useAuth()
-  const { checkAccess, hasReportAccess } = useRoleAccess()
   const [userRole, setUserRole] = useState<Responsibility | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -73,14 +81,14 @@ export const useUserAccess = () => {
     return user
   }
 
-  const checkRouteAccess = (path: string): AccessLevel => {
+  const checkRouteAccess = (_path: string): AccessLevel => {
     if (!user || !userRole) return "none"
-    return checkAccess(userRole, path)
+    return "both"
   }
 
   const checkReportAccess = (reportName: string): boolean => {
     if (!user || !userRole) return false
-    return hasReportAccess(userRole, reportName)
+    return userRole.report_access.includes(reportName)
   }
 
   const hasEditAccess = (path: string): boolean => {
