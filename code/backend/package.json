@@ -59,5 +59,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "overrides": {
+    "minimatch": {
+      "brace-expansion": "5.0.8"
+    },
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.25.4"
+    }
+  }
 }
